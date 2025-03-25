@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
-import 'screens/welcome_screen.dart'; // Import the Welcome Screen
+import 'screens/welcome_screen.dart';  
+import 'screens/register_screen.dart';  
 
 void main() {
-  runApp(const MyApp()); // Run the app starting with MyApp()
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: WelcomeScreen(), // Set WelcomeScreen as the first screen
+      initialRoute: '/',
+      routes: {
+        '/': (context) => WelcomeScreen(),
+        '/register': (context) => RegisterScreen(),
+      },
     );
   }
 }

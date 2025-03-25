@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'register_screen.dart';  
 
 class WelcomeScreen extends StatelessWidget {
   @override
@@ -7,9 +8,13 @@ class WelcomeScreen extends StatelessWidget {
       body: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/images/background.png"), // Background image
-            fit: BoxFit.cover, // Makes the image cover the full screen
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.pink.shade300,
+              Colors.pink.shade100,
+            ],
           ),
         ),
         child: Column(
@@ -21,7 +26,7 @@ class WelcomeScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
-                fontFamily: 'Poppins', // Custom font
+                fontFamily: 'Poppins',
                 color: Colors.white,
               ),
             ),
@@ -46,8 +51,10 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  // Navigate to the next screen
-                  print("Get Started Clicked");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => RegisterScreen()),
+                  );
                 },
                 child: Text(
                   'Get Started',

@@ -19,3 +19,15 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  # Adding fonts
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
+
+  # Uncomment this section if you are using any assets like images
+  assets:
+    - assets/images/ # Specify the folder for images if you use any
