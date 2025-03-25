@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'register_screen.dart';  
+import 'register_screen.dart';  // Import Register Screen
 
 class WelcomeScreen extends StatelessWidget {
   @override
@@ -51,6 +51,7 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
+                  // Navigate to Register Screen
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => RegisterScreen()),
