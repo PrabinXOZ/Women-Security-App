@@ -30,4 +30,7 @@ flutter:
 
   # Uncomment this section if you are using any assets like images
   assets:
-    - assets/images/ # Specify the folder for images if you use any
+    - assets/images/google.png
+    - assets/images/facebook.png
+
+

@@ -1,5 +1,7 @@
+
 import 'package:flutter/material.dart';
 import 'welcome_screen.dart';  // Import Welcome Screen for navigation back
+import 'login_screen.dart';  // Import Login Screen for navigation
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -112,7 +114,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       SizedBox(height: 10),
                       TextButton(
                         onPressed: () {
-                          print("Navigate to Sign In");
+                          Navigator.pushNamed(context, '/login');  // Navigate to Login Screen
                         },
                         child: Text(
                           "Already have an account? Sign in",
@@ -128,22 +130,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
 
-                // 🟢 BACK BUTTON (NEWLY ADDED)
-                SizedBox(height: 20),
-                IconButton(
-                  icon: Icon(Icons.arrow_back, color: Colors.white, size: 30),
+                // 🟢 IMPROVED BACK BUTTON AT BOTTOM
+                SizedBox(height: 30),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.pink.shade400,
+                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    shadowColor: Colors.black26,
+                    elevation: 5,
+                  ),
+                  icon: Icon(Icons.arrow_back),
+                  label: Text(
+                    "Back to Welcome",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
                   onPressed: () {
                     Navigator.pop(context);  // Go back to Welcome Screen
                   },
                 ),
-                Text(
-                  "Back to Welcome",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
-                SizedBox(height: 20),
+                SizedBox(height: 40),
               ],
             ),
           ),
