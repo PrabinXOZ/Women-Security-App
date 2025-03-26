@@ -1,7 +1,5 @@
-
 import 'package:flutter/material.dart';
-import 'welcome_screen.dart';  // Import Welcome Screen for navigation back
-import 'login_screen.dart';  // Import Login Screen for navigation
+import 'login_screen.dart'; // Import Login Screen for navigation back
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -99,7 +97,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         ),
                         onPressed: () {
-                          print("OTP Sent");
+                          // Proceed to Login screen after registration
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => LoginScreen()),
+                          );
                         },
                         child: Text(
                           'Get OTP',
@@ -114,7 +116,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       SizedBox(height: 10),
                       TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/login');  // Navigate to Login Screen
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => LoginScreen()),
+                          );
                         },
                         child: Text(
                           "Already have an account? Sign in",
