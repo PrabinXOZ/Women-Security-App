@@ -1,0 +1,11 @@
+# Increase Gradle's JVM heap size for better performance
+org.gradle.jvmargs=-Xmx1536M
+
+# Enable R8 for code shrinking and obfuscation
+android.enableR8=true
+
+# Ensure AndroidX is used in the project
+android.useAndroidX=true
+
+# Enable Jetifier to automatically migrate old dependencies to AndroidX
+android.enableJetifier=true

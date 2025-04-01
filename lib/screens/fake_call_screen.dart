@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 class FakeCallScreen extends StatefulWidget {
   @override
@@ -10,6 +11,38 @@ class _FakeCallScreenState extends State<FakeCallScreen> {
   String _callerName = 'Mom';
   String _callTime = '00:00';
   int _seconds = 0;
+  Timer? _timer;
+
+  void _startCall() {
+    setState(() {
+      _isCallActive = true;
+      _seconds = 0;
+      _callTime = '00:00';
+    });
+
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        _seconds++;
+        final minutes = (_seconds ~/ 60).toString().padLeft(2, '0');
+        final seconds = (_seconds % 60).toString().padLeft(2, '0');
+        _callTime = '$minutes:$seconds';
+      });
+    });
+  }
+
+  void _endCall() {
+    _timer?.cancel();
+    setState(() {
+      _isCallActive = false;
+      _callTime = '00:00';
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +54,19 @@ class _FakeCallScreenState extends State<FakeCallScreen> {
             AppBar(
               backgroundColor: Colors.transparent,
               elevation: 0,
-              title: Text('Fake Call'),
               centerTitle: true,
+              title: const Text(
+                'Fake Call',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
             ),
             Expanded(
               child: Center(
-                child: _isCallActive
-                    ? _buildActiveCallUI()
-                    : _buildCallOptions(),
+                child: _isCallActive ? _buildActiveCallUI() : _buildCallOptions(),
               ),
             ),
           ],
@@ -41,45 +79,33 @@ class _FakeCallScreenState extends State<FakeCallScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          'Trigger a fake call when you feel unsafe',
+        const Icon(Icons.phone_android, size: 100, color: Colors.white),
+        const SizedBox(height: 20),
+        const Text(
+          'Need an excuse to leave?',
           style: TextStyle(
+            fontSize: 18,
+            fontFamily: 'Poppins',
             color: Colors.white,
-            fontSize: 16,
           ),
-          textAlign: TextAlign.center,
         ),
-        SizedBox(height: 30),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            foregroundColor: Colors.pink.shade300,
-            minimumSize: Size(200, 50),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-          ),
-          onPressed: () {
-            setState(() {
-              _isCallActive = true;
-              _startTimer();
-            });
-          },
-          child: Text(
+        const SizedBox(height: 30),
+        ElevatedButton.icon(
+          icon: const Icon(Icons.call, color: Colors.white),
+          label: const Text(
             'Start Fake Call',
             style: TextStyle(
-              fontSize: 18,
+              fontFamily: 'Poppins',
               fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
           ),
-        ),
-        SizedBox(height: 20),
-        Text(
-          'Customize caller name in settings',
-          style: TextStyle(
-            color: Colors.white70,
-            fontSize: 14,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
           ),
+          onPressed: _startCall,
         ),
       ],
     );
@@ -89,62 +115,49 @@ class _FakeCallScreenState extends State<FakeCallScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        CircleAvatar(
+        const CircleAvatar(
           radius: 50,
           backgroundColor: Colors.white,
-          child: Icon(
-            Icons.person,
-            size: 60,
-            color: Colors.pink.shade300,
-          ),
+          child: Icon(Icons.person, size: 50, color: Colors.pink),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 16),
         Text(
           _callerName,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 28,
+          style: const TextStyle(
+            fontSize: 24,
             fontWeight: FontWeight.bold,
+            fontFamily: 'Poppins',
+            color: Colors.white,
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 8),
         Text(
           _callTime,
-          style: TextStyle(
-            color: Colors.white70,
+          style: const TextStyle(
             fontSize: 18,
+            fontFamily: 'Poppins',
+            color: Colors.white70,
           ),
         ),
-        SizedBox(height: 50),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FloatingActionButton(
-              backgroundColor: Colors.red,
-              onPressed: () {
-                setState(() {
-                  _isCallActive = false;
-                  _seconds = 0;
-                });
-              },
-              child: Icon(Icons.call_end),
+        const SizedBox(height: 30),
+        ElevatedButton.icon(
+          icon: const Icon(Icons.call_end, color: Colors.white),
+          label: const Text(
+            'End Call',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
-          ],
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.redAccent,
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          ),
+          onPressed: _endCall,
         ),
       ],
     );
-  }
-
-  void _startTimer() {
-    Future.delayed(Duration(seconds: 1), () {
-      if (_isCallActive) {
-        setState(() {
-          _seconds++;
-          _callTime = '${(_seconds ~/ 60).toString().padLeft(2, '0')}:'
-              '${(_seconds % 60).toString().padLeft(2, '0')}';
-        });
-        _startTimer();
-      }
-    });
   }
 }

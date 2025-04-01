@@ -1,8 +1,6 @@
 name: women_security_app
 description: A Flutter project for the Women's Security App
-
 publish_to: 'none'
-
 version: 1.0.0+1
 
 environment:
@@ -12,23 +10,22 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-  confetti: ^0.7.0
   google_maps_flutter: ^2.2.1
-  flutter_polyline_points: ^1.0.0
   geolocator: ^9.0.2
-  url_launcher: ^6.1.7
-  http: ^0.13.5
-  shared_preferences: ^2.1.1
   flutter_sms: ^2.3.1
-  vibration: ^1.7.5
+  url_launcher: ^6.1.7
+  shared_preferences: ^2.1.1
   permission_handler: ^10.2.0
+  vibration: ^1.7.5
   intl: ^0.17.0
+  confetti: ^0.7.0
+  flutter_local_notifications: ^15.1.1
+  audioplayers: ^5.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
-  
 
 flutter:
   uses-material-design: true
@@ -37,6 +34,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/sounds/
+    - assets/fonts/
 
   fonts:
     - family: Poppins
@@ -46,12 +44,3 @@ flutter:
           weight: 700
         - asset: assets/fonts/Poppins-SemiBold.ttf
           weight: 600
-
-  # For Google Maps API (add your API key in AndroidManifest.xml and Info.plist)
-  plugin:
-    platforms:
-      android:
-        package: com.google.maps.flutter
-        pluginClass: GoogleMapsPlugin
-      ios:
-        pluginClass: FLTGoogleMapsPlugin

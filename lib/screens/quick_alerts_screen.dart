@@ -1,4 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:flutter_sms/flutter_sms.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class QuickAlertsScreen extends StatefulWidget {
   @override
@@ -6,32 +13,117 @@ class QuickAlertsScreen extends StatefulWidget {
 }
 
 class _QuickAlertsScreenState extends State<QuickAlertsScreen> {
+  final AudioPlayer _audioPlayer = AudioPlayer();
+
   final List<Map<String, dynamic>> alertOptions = [
-    {
-      'title': 'Emergency Alert',
-      'icon': Icons.warning_amber_rounded,
-      'color': Colors.red,
-      'message': 'Send your location to emergency contacts'
-    },
-    {
-      'title': 'Fake Call',
-      'icon': Icons.phone,
-      'color': Colors.blue,
-      'message': 'Trigger a fake incoming call'
-    },
-    {
-      'title': 'Share Location',
-      'icon': Icons.location_on,
-      'color': Colors.green,
-      'message': 'Share live location with trusted contacts'
-    },
-    {
-      'title': 'Sound Alarm',
-      'icon': Icons.alarm,
-      'color': Colors.orange,
-      'message': 'Activate loud alarm sound'
-    },
+    {'title': 'Emergency Alert', 'icon': Icons.warning_amber_rounded, 'color': Colors.red, 'action': 'sos'},
+    {'title': 'Fake Call', 'icon': Icons.phone, 'color': Colors.blue, 'action': 'fake_call'},
+    {'title': 'Share Location', 'icon': Icons.location_on, 'color': Colors.green, 'action': 'location'},
+    {'title': 'Sound Alarm', 'icon': Icons.alarm, 'color': Colors.orange, 'action': 'alarm'},
   ];
+
+  void _handleAction(String action) {
+    switch (action) {
+      case 'sos':
+        sendSOSMessage();
+        break;
+      case 'fake_call':
+        Navigator.pushNamed(context, '/fake-call');
+        break;
+      case 'location':
+        shareLocation();
+        break;
+      case 'alarm':
+        playAlarm();
+        break;
+      default:
+        break;
+    }
+  }
+
+  Future<void> playAlarm() async {
+    try {
+      await _audioPlayer.play(AssetSource('sounds/alarm.mp3'));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('🔊 Alarm activated!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to play alarm: $e')),
+      );
+    }
+  }
+
+  Future<String?> getCurrentLocationLink() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+      return null;
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) return null;
+    }
+    if (permission == LocationPermission.deniedForever) return null;
+
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    return "https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}";
+  }
+
+  Future<void> sendSOSMessage() async {
+    var status = await Permission.sms.request();
+    if (!status.isGranted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('SMS permission denied')),
+      );
+      return;
+    }
+
+    String? locationLink = await getCurrentLocationLink();
+    if (locationLink == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Unable to get location')),
+      );
+      return;
+    }
+
+    String message = "🚨 Emergency! I need help. Here's my location:\n$locationLink";
+
+    List<String> recipients = [
+      '+919876543210',
+      '+919876543211',
+    ];
+
+    try {
+      await sendSMS(message: message, recipients: recipients, sendDirect: true);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('🚨 SOS sent to contacts!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to send SMS: $e')),
+      );
+    }
+  }
+
+  Future<void> shareLocation() async {
+    String? locationLink = await getCurrentLocationLink();
+    if (locationLink != null) {
+      final uri = Uri.parse(locationLink);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not open location: $locationLink')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +132,20 @@ class _QuickAlertsScreenState extends State<QuickAlertsScreen> {
       appBar: AppBar(
         backgroundColor: Colors.pink.shade300,
         elevation: 0,
-        title: const Text('Quick Alerts'),
         centerTitle: true,
+        title: const Text(
+          'Quick Alerts',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
-          borderRadius: const BorderRadius.only(
+          borderRadius: BorderRadius.only(
             topLeft: Radius.circular(30),
             topRight: Radius.circular(30),
           ),
@@ -55,104 +154,43 @@ class _QuickAlertsScreenState extends State<QuickAlertsScreen> {
           padding: const EdgeInsets.all(20),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            crossAxisSpacing: 15,
-            mainAxisSpacing: 15,
-            childAspectRatio: 0.9,
+            mainAxisSpacing: 20,
+            crossAxisSpacing: 20,
           ),
           itemCount: alertOptions.length,
           itemBuilder: (context, index) {
-            return _buildAlertCard(
-              alertOptions[index]['title'],
-              alertOptions[index]['icon'],
-              alertOptions[index]['color'],
-              alertOptions[index]['message'],
+            final alert = alertOptions[index];
+            return GestureDetector(
+              onTap: () => _handleAction(alert['action']),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: alert['color'].withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: alert['color'], width: 1.5),
+                ),
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(alert['icon'], size: 40, color: alert['color']),
+                    const SizedBox(height: 12),
+                    Text(
+                      alert['title'],
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             );
           },
         ),
       ),
-    );
-  }
-
-  Widget _buildAlertCard(String title, IconData icon, Color color, String message) {
-    return Card(
-      elevation: 5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(15),
-        onTap: () {
-          _showAlertConfirmation(title, message);
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(15),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: color.withOpacity(0.2),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(icon, size: 30, color: color),
-              ),
-              const SizedBox(height: 15),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 5),
-              Text(
-                message,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey.shade600,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showAlertConfirmation(String title, String message) {
-    showDialog(
-      context: context, // Now context is accessible
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Confirm $title'),
-          content: Text('Are you sure you want to $message?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.pink.shade300,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('$title activated!'),
-                    backgroundColor: Colors.green,
-                  ),
-                );
-              },
-              child: const Text('Confirm'),
-            ),
-          ],
-        );
-      },
     );
   }
 }

@@ -26,9 +26,9 @@ class EmergencyProtocolsScreen extends StatelessWidget {
     {
       'title': 'Home Invasion',
       'steps': '1. Lock yourself in a safe room\n'
-               '2. Silently call emergency number\n'
-               '3. Use panic alert in app\n'
-               '4. Don\'t confront the intruder'
+               '2. Stay quiet and call police\n'
+               '3. Do not confront the intruder\n'
+               '4. Keep phone on silent with alerts off'
     },
   ];
 
@@ -39,11 +39,18 @@ class EmergencyProtocolsScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.pink.shade300,
         elevation: 0,
-        title: Text('Emergency Protocols'),
         centerTitle: true,
+        title: const Text(
+          'Emergency Protocols',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(30),
@@ -51,56 +58,49 @@ class EmergencyProtocolsScreen extends StatelessWidget {
           ),
         ),
         child: ListView.builder(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           itemCount: protocols.length,
           itemBuilder: (context, index) {
-            return _buildProtocolCard(
-              protocols[index]['title']!,
-              protocols[index]['steps']!,
+            final item = protocols[index];
+            return Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              margin: const EdgeInsets.only(bottom: 16),
+              elevation: 3,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.shield, color: Colors.pink, size: 24),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            item['title']!,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      item['steps']!,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Poppins',
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             );
           },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildProtocolCard(String title, String steps) {
-    return Card(
-      margin: EdgeInsets.only(bottom: 20),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      elevation: 3,
-      child: Padding(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.pink.shade300,
-              ),
-            ),
-            SizedBox(height: 15),
-            Text(
-              steps,
-              style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(height: 15),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.pink.shade100,
-                foregroundColor: Colors.pink.shade800,
-              ),
-              onPressed: () {
-                // Could link to relevant features
-              },
-              child: Text('Show Related Safety Features'),
-            ),
-          ],
         ),
       ),
     );

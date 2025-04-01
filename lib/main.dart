@@ -1,80 +1,63 @@
 import 'package:flutter/material.dart';
-import 'screens/welcome_screen.dart';
-import 'screens/register_screen.dart';
-import 'screens/login_screen.dart';
-import 'screens/otp_verification_screen.dart';
-import 'screens/otp_success_screen.dart';
-import 'screens/home_screen.dart';
-import 'screens/emergency_contacts_screen.dart';
-import 'screens/fake_call_screen.dart';
-import 'screens/safe_walk_screen.dart';
-import 'screens/quick_alerts_screen.dart';
-import 'screens/trusted_contacts_screen.dart';
-import 'screens/emergency_protocols_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:women_security_app/screens/home_screen.dart';
+import 'package:women_security_app/screens/profile_screen.dart' as profile;
+import 'package:women_security_app/screens/quick_alerts_screen.dart';
+import 'package:women_security_app/screens/fake_call_screen.dart' as fake;
+import 'package:women_security_app/screens/emergency_contacts_screen.dart' as emergency;
+import 'package:women_security_app/screens/trusted_contacts_screen.dart' as trusted;
+import 'package:women_security_app/screens/safe_walk_screen.dart' as walk;
+import 'package:women_security_app/screens/emergency_protocols_screen.dart' as protocols;
+import 'package:women_security_app/screens/history_log_screen.dart' as history;
+import 'package:women_security_app/services/notification_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.init(); // Make sure NotificationService is imported correctly and has a static init() method
+
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool _darkMode = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTheme();
+  }
+
+  Future<void> _loadTheme() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _darkMode = prefs.getBool('darkMode') ?? false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.pink,
-        scaffoldBackgroundColor: Colors.pink.shade300,
-        fontFamily: 'Poppins',
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.pink.shade300,
-          elevation: 0,
-          centerTitle: true,
-          titleTextStyle: const TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-          iconTheme: const IconThemeData(color: Colors.white),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.pink.shade200,
-            minimumSize: const Size(double.infinity, 50),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-            textStyle: const TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        cardTheme: CardTheme(
-          elevation: 3,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          margin: const EdgeInsets.all(10),
-        ),
-      ),
-      initialRoute: '/',
+      title: 'CREEP ZAP',
+      theme: _darkMode ? ThemeData.dark() : ThemeData.light(),
+      initialRoute: '/home',
       routes: {
-        '/': (context) =>  WelcomeScreen(),
-        '/register': (context) =>  RegisterScreen(),
-        '/login': (context) =>  LoginScreen(),
-        '/otp': (context) =>  OtpVerificationScreen(),
-        '/otp-success': (context) =>  OtpSuccessScreen(),
-        '/home': (context) =>  HomeScreen(),
-        '/emergency-contacts': (context) =>  EmergencyContactsScreen(),
-        '/fake-call': (context) =>  FakeCallScreen(),
-        '/safe-walk': (context) =>  SafeWalkScreen(),
-        '/quick-alerts': (context) =>  QuickAlertsScreen(),
-        '/trusted-contacts': (context) =>  TrustedContactsScreen(),
-        '/emergency-protocols': (context) =>  EmergencyProtocolsScreen(),
+        '/home': (context) => const HomeScreen(),
+        '/profile': (context) => profile.ProfileScreen(),
+        '/quick-alerts': (context) => QuickAlertsScreen(),
+        '/fake-call': (context) => fake.FakeCallScreen(),
+        '/emergency-contacts': (context) => emergency.EmergencyContactsScreen(),
+        '/trusted-contacts': (context) => trusted.TrustedContactsScreen(),
+        '/safe-walk': (context) => walk.SafeWalkScreen(),
+        '/emergency-protocols': (context) => protocols.EmergencyProtocolsScreen(),
+        '/history': (context) => history.HistoryLogScreen(),
       },
     );
   }

@@ -24,6 +24,60 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
     super.dispose();
   }
 
+  void _addContactDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text('Add Emergency Contact', style: TextStyle(fontFamily: 'Poppins')),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _nameController,
+              decoration: const InputDecoration(
+                labelText: 'Name',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _numberController,
+              keyboardType: TextInputType.phone,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              decoration: const InputDecoration(
+                labelText: 'Phone Number',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (_nameController.text.isNotEmpty && _numberController.text.isNotEmpty) {
+                setState(() {
+                  _contacts.add({
+                    'name': _nameController.text,
+                    'number': _numberController.text,
+                  });
+                  _nameController.clear();
+                  _numberController.clear();
+                });
+                Navigator.pop(context);
+              }
+            },
+            child: const Text('Add'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,180 +85,72 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
       appBar: AppBar(
         backgroundColor: Colors.pink.shade300,
         elevation: 0,
-        title: const Text('Emergency Contacts'),
         centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                ),
-              ),
-              child: ListView.builder(
-                padding: const EdgeInsets.all(20),
-                itemCount: _contacts.length,
-                itemBuilder: (context, index) {
-                  return _buildContactCard(
-                    _contacts[index]['name']!,
-                    _contacts[index]['number']!,
-                    index,
-                  );
-                },
-              ),
-            ),
-          ),
-          _buildAddContactButton(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildContactCard(String name, String number, int index) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 15),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      elevation: 3,
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        leading: Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            color: Colors.pink.shade100,
-            shape: BoxShape.circle,
-          ),
-          child: Icon(Icons.person, color: Colors.pink.shade300),
-        ),
-        title: Text(
-          name,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
-        ),
-        subtitle: Text(number),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              icon: Icon(Icons.call, color: Colors.pink.shade300),
-              onPressed: () => _makePhoneCall(number),
-            ),
-            IconButton(
-              icon: const Icon(Icons.delete, color: Colors.red),
-              onPressed: () => _deleteContact(index),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAddContactButton() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      color: Colors.white,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.pink.shade200,
-          minimumSize: const Size(double.infinity, 50),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-        ),
-        onPressed: () => _showAddContactDialog(),
-        child: const Text(
-          'Add Emergency Contact',
+        title: const Text(
+          'Emergency Contacts',
           style: TextStyle(
-            fontSize: 18,
-            color: Colors.white,
+            fontFamily: 'Poppins',
             fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.pink.shade300,
+        onPressed: _addContactDialog,
+        child: const Icon(Icons.add),
+      ),
+      body: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+        ),
+        child: ListView.builder(
+          padding: const EdgeInsets.all(20),
+          itemCount: _contacts.length,
+          itemBuilder: (context, index) {
+            final contact = _contacts[index];
+            return Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              margin: const EdgeInsets.only(bottom: 16),
+              child: ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                leading: const Icon(Icons.warning_amber, color: Colors.redAccent),
+                title: Text(
+                  contact['name']!,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                subtitle: Text(
+                  contact['number']!,
+                  style: const TextStyle(fontFamily: 'Poppins'),
+                ),
+                trailing: IconButton(
+                  icon: const Icon(Icons.call, color: Colors.green),
+                  onPressed: () => _makeCall(contact['number']!),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
   }
 
-  void _showAddContactDialog() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Add New Contact'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                  labelText: 'Contact Name',
-                  prefixIcon: Icon(Icons.person, color: Colors.pink.shade300),
-                ),
-              ),
-              const SizedBox(height: 15),
-              TextField(
-                controller: _numberController,
-                keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
-                  labelText: 'Phone Number',
-                  prefixIcon: Icon(Icons.phone, color: Colors.pink.shade300),
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.pink.shade300,
-              ),
-              onPressed: () {
-                if (_nameController.text.isNotEmpty && _numberController.text.isNotEmpty) {
-                  setState(() {
-                    _contacts.add({
-                      'name': _nameController.text,
-                      'number': _numberController.text,
-                    });
-                  });
-                  _nameController.clear();
-                  _numberController.clear();
-                  Navigator.pop(context);
-                }
-              },
-              child: const Text('Add'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _deleteContact(int index) {
-    setState(() {
-      _contacts.removeAt(index);
-    });
-  }
-
-  Future<void> _makePhoneCall(String number) async {
-    final Uri url = Uri.parse("tel:$number");
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url);
+  void _makeCall(String number) async {
+    final uri = Uri.parse('tel:$number');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Could not launch phone call'),
-          backgroundColor: Colors.red,
-        ),
+        const SnackBar(content: Text('Could not launch call')),
       );
     }
   }
