@@ -1,0 +1,5 @@
+com.example.women_security_app
+drawable launch_background
+mipmap ic_launcher
+style LaunchTheme
+style NormalTheme

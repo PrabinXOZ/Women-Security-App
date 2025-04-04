@@ -1,27 +1,27 @@
 plugins {
     id("com.android.application")
-    id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id("org.jetbrains.kotlin.android")
     id("dev.flutter.flutter-gradle-plugin")
+    
 }
 
 android {
-    compileSdk = 30  // or your desired SDK version
-    ndkVersion = "27.0.12077973"  // Ensure this matches your NDK version
+    namespace = "com.example.women_security_app"
+    compileSdk = 33
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 
     defaultConfig {
         applicationId = "com.example.women_security_app"
-        minSdk = 21  // or your minSdk version
-        targetSdk = 30  // or your targetSdk version
+        minSdk = 21
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
         multiDexEnabled = true
@@ -30,24 +30,21 @@ android {
     buildTypes {
         release {
             signingConfig = signingConfigs.getByName("debug")
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
-
-    lintOptions {
-        disable("InvalidPackage")
-    }
-
-    // Enable core desugaring (required for Java 8 features)
-    coreLibraryDesugaringEnabled = true  // This is crucial for Java 8 features
 }
 
 dependencies {
-    // Add this line to include desugaring support
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+    implementation("androidx.multidex:multidex:2.0.1")
     
-    // Other dependencies...
-}
 
+}
 
 flutter {
     source = "../.."

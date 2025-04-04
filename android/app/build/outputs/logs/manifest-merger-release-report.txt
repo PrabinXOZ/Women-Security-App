@@ -1,0 +1,112 @@
+-- Merging decision tree log ---
+application
+INJECTED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:10:5-41:19
+INJECTED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:10:5-41:19
+	android:extractNativeLibs
+		INJECTED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml
+	android:label
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:11:9-43
+	android:icon
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:13:9-43
+	android:name
+		INJECTED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:12:9-42
+manifest
+ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:1:1-50:12
+INJECTED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:1:1-50:12
+INJECTED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:1:1-50:12
+INJECTED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:1:1-50:12
+MERGED from [androidx.multidex:multidex:2.0.1] C:\Users\Ram\.gradle\caches\8.9\transforms\ab53f336196fd8084a4a09aa4aeb1abc\transformed\multidex-2.0.1\AndroidManifest.xml:17:1-22:12
+	package
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:2:5-45
+		INJECTED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml
+	android:versionCode
+		INJECTED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:1:11-69
+uses-permission#android.permission.SEND_SMS
+ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:5:5-67
+	android:name
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:5:22-64
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:6:5-79
+	android:name
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:6:22-76
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:7:5-81
+	android:name
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:7:22-78
+uses-permission#android.permission.POST_NOTIFICATIONS
+ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:8:5-77
+	android:name
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:8:22-74
+queries
+ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:44:5-49:15
+intent#action:name:android.intent.action.PROCESS_TEXT+data:mimeType:text/plain
+ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:45:9-48:18
+action#android.intent.action.PROCESS_TEXT
+ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:46:13-72
+	android:name
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:46:21-70
+data
+ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:47:13-50
+	android:mimeType
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:47:19-48
+uses-library#org.apache.http.legacy
+ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:16:9-88
+	android:required
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:16:61-85
+	android:name
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:16:23-60
+activity#com.example.women_security_app.MainActivity
+ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:18:9-36:20
+	android:launchMode
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:21:13-43
+	android:hardwareAccelerated
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:25:13-47
+	android:windowSoftInputMode
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:26:13-55
+	android:exported
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:20:13-36
+	android:configChanges
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:24:13-163
+	android:theme
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:23:13-47
+	android:taskAffinity
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:22:13-36
+	android:name
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:19:13-41
+meta-data#io.flutter.embedding.android.NormalTheme
+ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:28:13-31:17
+	android:resource
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:30:15-52
+	android:name
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:29:15-70
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:32:13-35:29
+action#android.intent.action.MAIN
+ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:33:17-68
+	android:name
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:33:25-66
+category#android.intent.category.LAUNCHER
+ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:34:17-76
+	android:name
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:34:27-74
+meta-data#flutterEmbedding
+ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:38:9-40:33
+	android:value
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:40:13-30
+	android:name
+		ADDED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml:39:13-44
+uses-sdk
+INJECTED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml
+INJECTED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml
+MERGED from [androidx.multidex:multidex:2.0.1] C:\Users\Ram\.gradle\caches\8.9\transforms\ab53f336196fd8084a4a09aa4aeb1abc\transformed\multidex-2.0.1\AndroidManifest.xml:20:5-43
+MERGED from [androidx.multidex:multidex:2.0.1] C:\Users\Ram\.gradle\caches\8.9\transforms\ab53f336196fd8084a4a09aa4aeb1abc\transformed\multidex-2.0.1\AndroidManifest.xml:20:5-43
+	android:targetSdkVersion
+		INJECTED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\AndroidManifest.xml
