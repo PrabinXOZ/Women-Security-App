@@ -1,8 +1,0 @@
-com.example.women_security_app-pngs-0 E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\build\generated\res\pngs\release
-com.example.women_security_app-resValues-1 E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\build\generated\res\resValues\release
-com.example.women_security_app-packageReleaseResources-2 E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\build\intermediates\incremental\release\packageReleaseResources\merged.dir
-com.example.women_security_app-packageReleaseResources-3 E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\build\intermediates\incremental\release\packageReleaseResources\stripped.dir
-com.example.women_security_app-merged-not-compiled-resources-4 E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\build\intermediates\merged-not-compiled-resources\release
-com.example.women_security_app-release-5 E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\build\intermediates\merged_res\release\mergeReleaseResources
-com.example.women_security_app-main-6 E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\main\res
-com.example.women_security_app-release-7 E:\Herald College\4th Sem\Colabrative Development\Women Security App\android\app\src\release\res

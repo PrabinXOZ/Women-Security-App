@@ -1,2 +1,0 @@
--keep class android.app.Application { <init>(); }
--keep class com.example.women_security_app.MainActivity { <init>(); }

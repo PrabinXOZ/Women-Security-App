@@ -1,6 +1,6 @@
 {
-    "name": "women_security_app",
-    "short_name": "women_security_app",
+    "name": "firebase_signin",
+    "short_name": "firebase_signin",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
