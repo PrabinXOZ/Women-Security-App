@@ -1,6 +1,6 @@
 {
-    "name": "firebase_signin",
-    "short_name": "firebase_signin",
+    "name": "new_app",
+    "short_name": "new_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
