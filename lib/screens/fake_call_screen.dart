@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/services.dart';
 
 class FakeCallScreen extends StatefulWidget {
   const FakeCallScreen({Key? key}) : super(key: key);
@@ -15,8 +17,8 @@ class _FakeCallScreenState extends State<FakeCallScreen> {
   Timer? _timer;
   late AudioPlayer _audioPlayer;
   String _callerName = 'Mom';
-
   final TextEditingController _callerNameController = TextEditingController();
+  static const platform = MethodChannel('com.example.dialer');
 
   @override
   void initState() {
@@ -25,26 +27,42 @@ class _FakeCallScreenState extends State<FakeCallScreen> {
     _playRingtone();
   }
 
+  // Function to play the ringtone based on the platform
   Future<void> _playRingtone() async {
-    await _audioPlayer.play(AssetSource('audio/fake_ringtone.mp3'));
+    if (Platform.isAndroid) {
+      try {
+        await platform.invokeMethod('playRingtone');
+      } catch (e) {
+        debugPrint('Error playing Android ringtone: $e');
+      }
+    } else if (Platform.isIOS) {
+      await _audioPlayer.play(AssetSource('audio/fake_ringtone.mp3'));
+    }
   }
 
+  // Function to stop the ringtone
   Future<void> _stopRingtone() async {
-    await _audioPlayer.stop();
+    if (Platform.isAndroid) {
+      try {
+        await platform.invokeMethod('stopRingtone');
+      } catch (e) {
+        debugPrint('Error stopping Android ringtone: $e');
+      }
+    } else if (Platform.isIOS) {
+      await _audioPlayer.stop();
+    }
   }
 
+  // Function to start the call
   void _startCall() {
     _stopRingtone();
-    setState(() {
-      _inCall = true;
-    });
+    setState(() => _inCall = true);
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        _callDuration = Duration(seconds: _callDuration.inSeconds + 1);
-      });
+      setState(() => _callDuration = Duration(seconds: _callDuration.inSeconds + 1));
     });
   }
 
+  // Function to end the call
   void _endCall() {
     _stopRingtone();
     _timer?.cancel();
@@ -59,37 +77,40 @@ class _FakeCallScreenState extends State<FakeCallScreen> {
     super.dispose();
   }
 
+  // Format duration for the call timer
   String _formatDuration(Duration d) {
     final minutes = d.inMinutes.remainder(60).toString().padLeft(2, '0');
     final seconds = d.inSeconds.remainder(60).toString().padLeft(2, '0');
     return '$minutes:$seconds';
   }
 
+  // Button to control call action
   Widget _buildActionButton(String label, IconData icon) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         CircleAvatar(
-          backgroundColor: Colors.blueAccent,
+          backgroundColor: Colors.white.withOpacity(0.1),
           radius: 40,
           child: Icon(icon, color: Colors.white, size: 30),
         ),
         const SizedBox(height: 8),
-        Text(label, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500))
+        Text(label, style: const TextStyle(color: Colors.white70, fontSize: 14, fontWeight: FontWeight.w500))
       ],
     );
   }
 
-  // Function to allow name editing
+  // Edit caller name popup dialog
   void _editCallerName() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Edit Caller Name'),
+          title: const Text('Edit Caller Name', style: TextStyle(color: Colors.black)),
           content: TextField(
             controller: _callerNameController,
-            decoration: const InputDecoration(hintText: "Enter new name"),
+            style: const TextStyle(color: Colors.black),
+            decoration: const InputDecoration(hintText: "Enter new name", hintStyle: TextStyle(color: Colors.black)),
           ),
           actions: <Widget>[
             TextButton(
@@ -101,11 +122,11 @@ class _FakeCallScreenState extends State<FakeCallScreen> {
                 });
                 Navigator.of(context).pop();
               },
-              child: const Text('Save'),
+              child: const Text('Save', style: TextStyle(color: Colors.black)),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
+              child: const Text('Cancel', style: TextStyle(color: Colors.black)),
             ),
           ],
         );
@@ -123,6 +144,7 @@ class _FakeCallScreenState extends State<FakeCallScreen> {
     );
   }
 
+  // UI for incoming call
   Widget _buildIncomingCallUI() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -130,7 +152,7 @@ class _FakeCallScreenState extends State<FakeCallScreen> {
         const Icon(Icons.account_circle, size: 120, color: Colors.white),
         const SizedBox(height: 24),
         GestureDetector(
-          onTap: _editCallerName, // Trigger name editing
+          onTap: _editCallerName,
           child: Text(
             _callerName,
             style: const TextStyle(color: Colors.white, fontSize: 34, fontWeight: FontWeight.bold),
@@ -151,6 +173,7 @@ class _FakeCallScreenState extends State<FakeCallScreen> {
     );
   }
 
+  // UI for active call
   Widget _buildActiveCallUI() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -158,7 +181,7 @@ class _FakeCallScreenState extends State<FakeCallScreen> {
         const Icon(Icons.account_circle, size: 120, color: Colors.white),
         const SizedBox(height: 16),
         GestureDetector(
-          onTap: _editCallerName, // Trigger name editing
+          onTap: _editCallerName,
           child: Text(
             _callerName,
             style: const TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
@@ -167,7 +190,6 @@ class _FakeCallScreenState extends State<FakeCallScreen> {
         const SizedBox(height: 8),
         Text(_formatDuration(_callDuration), style: const TextStyle(color: Colors.white70, fontSize: 18)),
         const SizedBox(height: 40),
-        // Row 1: Mute, Keypad, Speaker
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -179,7 +201,6 @@ class _FakeCallScreenState extends State<FakeCallScreen> {
           ],
         ),
         const SizedBox(height: 30),
-        // Row 2: Add Call, FaceTime, Contacts
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -196,6 +217,7 @@ class _FakeCallScreenState extends State<FakeCallScreen> {
     );
   }
 
+  // Custom button for call control
   Widget _buildCallControlButton(IconData icon, Color color, VoidCallback onPressed) {
     return GestureDetector(
       onTap: onPressed,
